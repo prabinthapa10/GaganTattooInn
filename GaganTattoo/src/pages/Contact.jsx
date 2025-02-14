@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
 import InputFields from "../Components/InputFields";
 import Button from "../Components/Button";
@@ -8,21 +8,39 @@ import emailjs from "@emailjs/browser";
 export default function Contact() {
   const form = useRef();
 
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    user_email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const sendEmail = (e) => {
     e.preventDefault();
-
-    // emailjs
-    //   .sendForm("service_bclk3c5", "template_uq865cm", form.current, {
-    //     publicKey: "y1xgGLOASQRW256ko",
-    //   })
-    //   .then(
-    //     () => {
-    //       console.log("SUCCESS!");
-    //     },
-    //     (error) => {
-    //       console.log("FAILED...", error.text);
-    //     }
-    //   );
+    emailjs
+      .sendForm("service_bclk3c5", "template_uq865cm", form.current, {
+        publicKey: "y1xgGLOASQRW256ko",
+      })
+      .then(
+        () => {
+          console.log("SUCCESS!");
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
+    setFormData({
+      first_name: "",
+      last_name: "",
+      user_email: "",
+      subject: "",
+      message: "",
+    });
   };
   return (
     <div>
@@ -36,11 +54,41 @@ export default function Contact() {
             onSubmit={sendEmail}
             className="w-[50%] bg-[#2920201a] p-5 rounded-lg"
           >
-            <InputFields name="First Name" type="text" fieldName="first_name" />
-            <InputFields name="Last Name" type="text" fieldName="last_name" />
-            <InputFields name="Email" type="email" fieldName="user_email" />
-            <InputFields name="Subject" type="text" fieldName="subject" />
-            <InputFields name="Message" type="textarea" fieldName="message" />
+            <InputFields
+              name="First Name"
+              type="text"
+              fieldName="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+            />
+            <InputFields
+              name="Last Name"
+              type="text"
+              fieldName="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+            />
+            <InputFields
+              name="Email"
+              type="email"
+              fieldName="user_email"
+              value={formData.user_email}
+              onChange={handleChange}
+            />
+            <InputFields
+              name="Subject"
+              type="text"
+              fieldName="subject"
+              value={formData.subject}
+              onChange={handleChange}
+            />
+            <InputFields
+              name="Message"
+              type="textarea"
+              fieldName="message"
+              value={formData.message}
+              onChange={handleChange}
+            />
             <Button className="w-full mt-4" title="Submit" type="submit" />
           </form>
           <div className="bg-[#2520202c] w-[100%]">
